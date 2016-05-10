@@ -162,10 +162,6 @@ backend openshift_default
             {{ if or (eq $cfg.TLSTermination "") (eq $cfg.TLSTermination "edge") }}
                 {{ if (eq $cfg.TLSTermination "") }}
 backend be_http_{{$cfgIdx}}
-###--- update --- ###
-  stick-table type ip size 1m expire 5m{{ if (len $.PeerEndpoints) gt 0 }} peers openshift_peers {{ end }}
-  stick on src
-###--- update --- ###
                 {{ else }}
 backend be_edge_http_{{$cfgIdx}}
                 {{ end }}
@@ -173,6 +169,10 @@ backend be_edge_http_{{$cfgIdx}}
   option redispatch
   balance leastconn
   timeout check 5000ms
+###--- update --- ###
+  stick-table type ip size 1m expire 5m{{ if (len $.PeerEndpoints) gt 0 }} peers openshift_peers {{ end }}
+  stick on src
+###--- update --- ###
   {{ if (eq $cfg.TLSTermination "") }}
     cookie OPENSHIFT_{{$cfgIdx}}_SERVERID insert indirect nocache httponly
   {{ else }}
