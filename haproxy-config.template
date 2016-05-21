@@ -170,7 +170,7 @@ backend be_edge_http_{{$cfgIdx}}
   balance leastconn
   timeout check 5000ms
 ###--- update --- ###
-  stick-table type ip size 1m expire 5m{{ if (len .peerEndpoints) gt 0 }} peers openshift_peers {{ end }}
+  stick-table type ip size 1m expire 5m{{ if (len .PeerEndpoints) gt 0 }} peers openshift_peers {{ end }}
   stick on src
 ###--- update --- ###
   {{ if (eq $cfg.TLSTermination "") }}
@@ -189,7 +189,7 @@ backend be_tcp_{{$cfgIdx}}
   hash-type consistent
   timeout check 5000ms
 ###--- update --- ###
-  stick-table type ip size 1m expire 5m{{ if (len .peerEndpoints) gt 0 }} peers openshift_peers {{ end }}
+  stick-table type ip size 1m expire 5m{{ if (len .PeerEndpoints) gt 0 }} peers openshift_peers {{ end }}
   stick on src
 ###--- update --- ###
                 {{ range $idx, $endpoint := $serviceUnit.EndpointTable }}
@@ -290,9 +290,9 @@ backend be_secure_{{$cfgIdx}}
 {{/* *** sticky tables among the routers according to instructions at *** */}}
 {{/* *** https://docs.openshift.com/enterprise/3.0/install_config/install/deploy_router.html#using-stick-tables  *** */}}
 
-{{ if (len .peerEndpoints) gt 0 }}
+{{ if (len .PeerEndpoints) gt 0 }}
 peers openshift_peers
-  {{ range $endpointID, $endpoint := .peerEndpoints }}
+  {{ range $endpointID, $endpoint := .PeerEndpoints }}
        peer {{$endpoint.TargetName}} {{$endpoint.IP}}:1937
   {{ end }}
 {{ end }}
