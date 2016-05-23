@@ -170,7 +170,7 @@ backend be_edge_http_{{$cfgIdx}}
   balance leastconn
   timeout check 5000ms
 ###--- update --- ###
-  stick-table type ip size 1m expire 5m{{ if (len .PeerEndpoints) gt 0 }} peers openshift_peers {{ end }}
+  stick-table type ip size 1m expire 5m{{ if (len $templateRouter.PeerEndpoints) gt 0 }} peers openshift_peers {{ end }}
   stick on src
 ###--- update --- ###
   {{ if (eq $cfg.TLSTermination "") }}
