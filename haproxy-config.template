@@ -211,6 +211,16 @@ backend be_secure_{{$cfgIdx}}
         {{ end  }}{{/* $serviceUnit.ServiceAliasConfigs*/}}
 {{ end }}{{/* $serviceUnit */}}
 
+{{/* *** sticky tables among the routers according to instructions at *** */}}
+{{/* *** https://docs.openshift.com/enterprise/3.0/install_config/install/deploy_router.html#using-stick-tables  *** */}}
+
+{{ if (len $.PeerEndpoints) gt 0 }}
+peers openshift_peers
+  {{ range $endpointID, $endpoint := $.PeerEndpoints }}
+       peer {{$endpoint.TargetName}} {{$endpoint.IP}}:1937
+  {{ end }}
+{{ end }}
+
 {{ end }}{{/* end haproxy config template */}}
 
 {{/*--------------------------------- END OF HAPROXY CONFIG, BELOW ARE MAPPING FILES ------------------------*/}}
@@ -287,15 +297,7 @@ backend be_secure_{{$cfgIdx}}
 {{ end }}{{/* end reencrypt passthrough map template */}}
 
 
-{{/* *** sticky tables among the routers according to instructions at *** */}}
-{{/* *** https://docs.openshift.com/enterprise/3.0/install_config/install/deploy_router.html#using-stick-tables  *** */}}
 
-{{ if (len $.PeerEndpoints) gt 0 }}
-peers openshift_peers
-  {{ range $endpointID, $endpoint := $.PeerEndpoints }}
-       peer {{$endpoint.TargetName}} {{$endpoint.IP}}:1937
-  {{ end }}
-{{ end }}
 
 
 
