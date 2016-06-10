@@ -217,7 +217,7 @@ backend be_secure_{{$cfgIdx}}
 {{ if (len .PeerEndpoints) gt 0 }}
 peers openshift_peers
   {{ range $endpointID, $endpoint := $.PeerEndpoints }}
-       peer {{$endpoint.TargetName}} {{$endpoint.IP}}:1937
+       peer {{$endpoint.IP}} {{$endpoint.IP}}:1937
   {{ end }}
 {{ end }}
 
